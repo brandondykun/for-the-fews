@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "@/context/auth-context";
+
 import { DAILY_MESSAGE_LIMIT } from "@/constants";
+import { useAuth } from "@/context/auth-context";
 
 const STORAGE_KEY = "rateLimit";
 
