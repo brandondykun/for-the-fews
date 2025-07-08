@@ -7,17 +7,17 @@ import { useRouter } from "next/navigation";
 import { LoadingScreen } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/context/auth-context";
 
-export default function Home() {
+export default function ProtectedRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (user) {
-        router.push("/dashboard");
-      } else {
-        router.push("/login");
-      }
+    if (!loading && !user) {
+      router.push("/login");
     }
   }, [user, loading, router]);
 
@@ -25,5 +25,9 @@ export default function Home() {
     return <LoadingScreen size="md" />;
   }
 
-  return null;
+  if (!user) {
+    return null;
+  }
+
+  return <>{children}</>;
 }

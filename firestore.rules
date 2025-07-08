@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Rate limiting collection - only server can write, no client access
+    match /rateLimits/{document} {
+      // Deny all client access to rate limit documents
+      // Only server-side code (Firebase Admin SDK) can read/write these documents
+      allow read, write: if false;
+    }
+    
+    // Registration rate limiting collection - only server can write, no client access
+    match /registrationRateLimits/{document} {
+      // Deny all client access to registration rate limit documents
+      // Only server-side code (Firebase Admin SDK) can read/write these documents
+      allow read, write: if false;
+    }
+    
+    // Users collection - users can only access their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Join code collection - users can read active join codes for registration
+    // but cannot modify them (only admin/server can write)
+    match /joinCode/{document} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only server-side code can modify join codes
+    }
+    
+    // Deny all other collections by default
+    // This ensures no accidental data exposure
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 
