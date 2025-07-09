@@ -23,8 +23,6 @@ export default function ChatModeButton({
       width={1}
       roundedSize="lg"
       showGradientBorder={chatMode === buttonMode}
-      rotationSpeed="slow"
-      rotate={true}
       defaultBorderColor="bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-500 transition-all duration-300"
     >
       <div

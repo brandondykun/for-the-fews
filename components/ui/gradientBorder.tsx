@@ -6,18 +6,6 @@ import { cn } from "@/lib/utils";
 
 export interface GradientBorderProps {
   children: React.ReactNode;
-  from?: string;
-  via?: string;
-  to?: string;
-  conicDirection?:
-    | "to-t"
-    | "to-r"
-    | "to-b"
-    | "to-l"
-    | "to-tr"
-    | "to-tl"
-    | "to-br"
-    | "to-bl";
   width?:
     | 0
     | 1
@@ -39,8 +27,6 @@ export interface GradientBorderProps {
   className?: string;
   rounded?: boolean;
   roundedSize?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
-  rotate?: boolean;
-  rotationSpeed?: "slow" | "normal" | "fast";
   defaultBorderColor?: string;
   showGradientBorder?: boolean;
 }
@@ -76,54 +62,33 @@ const widthMap = {
   16: "p-[16px]",
 };
 
-const rotationSpeedMap = {
-  slow: "animate-spin [animation-duration:8s]",
-  normal: "animate-spin [animation-duration:4s]",
-  fast: "animate-spin [animation-duration:3s]",
-  fastest: "animate-spin [animation-duration:2s]",
-};
-
 export function GradientBorder({
   children,
   width = 1,
   className,
   rounded = true,
   roundedSize = "lg",
-  rotate = false,
-  rotationSpeed = "normal",
   defaultBorderColor = "bg-neutral-200 dark:bg-neutral-700",
   showGradientBorder = true,
   ...props
 }: GradientBorderProps) {
   const roundedClass = rounded ? roundedMap[roundedSize] : roundedMap.none;
   const widthClass = widthMap[width];
-  const rotationClass = rotate ? rotationSpeedMap[rotationSpeed] : "";
-
-  // Build conic gradient
 
   return (
     <div
       className={cn(
-        "relative bg-neutral-100 overflow-hidden",
+        "relative overflow-hidden",
         widthClass,
         roundedClass,
-        defaultBorderColor
+        showGradientBorder
+          ? "bg-conic/decreasing dark:from-violet-700 dark:via-lime-300 dark:to-violet-700 from-violet-500 via-lime-500 to-violet-500"
+          : defaultBorderColor,
+        className
       )}
       {...props}
     >
-      {/* Rotating gradient border */}
-      {showGradientBorder && (
-        <div
-          className={cn(
-            "absolute -top-[500px] -left-[500px] -right-[500px] -bottom-[500px] w-100vw h-100vh bg-conic/decreasing dark:from-violet-700 dark:via-lime-300 dark:to-violet-700 from-violet-500 via-lime-500 to-violet-500",
-            roundedClass,
-            rotationClass,
-            className
-          )}
-        ></div>
-      )}
-
-      {/* Stationary content */}
+      {/* Content */}
       <div className={cn("relative z-10 overflow-hidden", roundedClass)}>
         {children}
       </div>

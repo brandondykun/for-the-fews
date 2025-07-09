@@ -46,12 +46,7 @@ export function AuthFormLayout({
             bottomPadding ? "mb-8" : ""
           }`}
         >
-          <GradientBorder
-            rotate={true}
-            rotationSpeed="slow"
-            roundedSize="2xl"
-            width={1}
-          >
+          <GradientBorder roundedSize="2xl" width={1}>
             <Card className="sm:w-sm md:w-md dark:bg-neutral-950 dark:border-neutral-900">
               <CardHeader>
                 <CardTitle className="mb-2">

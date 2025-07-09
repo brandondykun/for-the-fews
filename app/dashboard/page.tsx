@@ -62,12 +62,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <GradientBorder
-                width={1}
-                roundedSize="xl"
-                rotate
-                rotationSpeed="slow"
-              >
+              <GradientBorder width={1} roundedSize="xl">
                 <Card className="dark:bg-neutral-800 dark:border-neutral-700">
                   <CardHeader>
                     <CardTitle className="dark:text-neutral-100 flex flex-row gap-2 items-center text-xl">

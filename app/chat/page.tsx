@@ -31,12 +31,7 @@ export default function ChatPage() {
               </p>
             </div>
             <div className="flex flex-1 justify-center items-center">
-              <GradientBorder
-                width={1}
-                roundedSize="xl"
-                rotate
-                rotationSpeed="slow"
-              >
+              <GradientBorder width={1} roundedSize="xl">
                 <Card className="max-w-md bg-white dark:bg-neutral-800 backdrop-blur-sm border-neutral-200 dark:border-neutral-700">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-lg">
