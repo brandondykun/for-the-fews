@@ -21,8 +21,16 @@ export async function verifyIdToken(idToken: string) {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     return decodedToken;
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Error verifying ID token:", error);
+    // Always log auth errors, even in production, since they're critical
+    console.error("Error verifying ID token:", error);
+
+    // Log additional debugging info for Firebase auth issues
+    if (error instanceof Error) {
+      console.error("Auth error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
     }
     throw new Error("Invalid token");
   }

@@ -159,8 +159,16 @@ export async function checkAndUpdateRateLimit(
       };
     });
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Rate limit check failed:", error);
+    // Always log rate limit errors, even in production, since they're critical
+    console.error("Rate limit check failed:", error);
+
+    // Log additional debugging info for Firebase connection issues
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
     }
 
     // Fail open - allow the request if we can't check the limit
@@ -203,8 +211,16 @@ export async function getRateLimitStatus(
       resetTime: getResetTime(),
     };
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Rate limit status check failed:", error);
+    // Always log rate limit errors, even in production, since they're critical
+    console.error("Rate limit status check failed:", error);
+
+    // Log additional debugging info for Firebase connection issues
+    if (error instanceof Error) {
+      console.error("Error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
     }
 
     // Fail open
