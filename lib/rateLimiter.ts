@@ -8,6 +8,7 @@ import {
   RegistrationRateLimitDocument,
 } from "@/types";
 
+import { devError } from "./dev-utils";
 import { adminDb } from "./firebase-admin";
 
 const COLLECTION_NAME = "rateLimits";
@@ -162,15 +163,6 @@ export async function checkAndUpdateRateLimit(
     // Always log rate limit errors, even in production, since they're critical
     console.error("Rate limit check failed:", error);
 
-    // Log additional debugging info for Firebase connection issues
-    if (error instanceof Error) {
-      console.error("Error details:", {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
-      });
-    }
-
     // Fail open - allow the request if we can't check the limit
     // This prevents the rate limiter from breaking the entire service
     return {
@@ -213,15 +205,6 @@ export async function getRateLimitStatus(
   } catch (error) {
     // Always log rate limit errors, even in production, since they're critical
     console.error("Rate limit status check failed:", error);
-
-    // Log additional debugging info for Firebase connection issues
-    if (error instanceof Error) {
-      console.error("Error details:", {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
-      });
-    }
 
     // Fail open
     return {
@@ -292,9 +275,7 @@ export async function checkAndUpdateRegistrationRateLimit(
       };
     });
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Registration rate limit check failed:", error);
-    }
+    devError("Registration rate limit check failed:", error);
 
     // Fail open - allow the request if we can't check the limit
     // This prevents the rate limiter from breaking the registration service
@@ -336,9 +317,7 @@ export async function getRegistrationRateLimitStatus(
       resetTime: getNextHourResetTime(),
     };
   } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Registration rate limit status check failed:", error);
-    }
+    devError("Registration rate limit status check failed:", error);
 
     // Fail open
     return {
