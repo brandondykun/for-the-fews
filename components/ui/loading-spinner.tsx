@@ -29,7 +29,7 @@ export function LoadingSpinner({
 // Centered loading wrapper
 export function LoadingScreen({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
-    <div className="flex items-center justify-center min-h-screen dark:bg-neutral-900 bg-neutral-100">
+    <div className="flex items-center justify-center min-h-screen">
       <LoadingSpinner size={size} />
     </div>
   );

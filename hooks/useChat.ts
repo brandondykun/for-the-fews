@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { ChatMode, Message } from "@/types";
+
+import { DEFAULT_FIRST_MESSAGES, MAX_CONVERSATION_HISTORY } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { useRateLimit } from "@/hooks/useRateLimit";
-import { DEFAULT_FIRST_MESSAGES, MAX_CONVERSATION_HISTORY } from "@/constants";
 import { devError, devWarn } from "@/lib/dev-utils";
+import { ChatMode, Message } from "@/types";
 
 export function useChat() {
   const [messagesByMode, setMessagesByMode] = useState<

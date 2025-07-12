@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type ChatMode = "fart" | "pirate" | "linus" | "minecraft" | "comfort";
 
 // User document types
@@ -43,4 +45,28 @@ export interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+}
+
+export interface ChatMessage {
+  id: string;
+  roomId: string;
+  authorId: string;
+  authorName: string;
+  text: string;
+  createdAt: Timestamp;
+}
+
+export type ChatRoomType = "general" | "private" | "group";
+export interface ChatRoom {
+  name: string;
+  type: ChatRoomType;
+  members: string[];
+  createdAt: string;
+  description: string;
+  lastMessage: {
+    text: string;
+    authorId: string;
+    authorName: string;
+    createdAt: Timestamp;
+  };
 }

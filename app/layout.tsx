@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Open_Sans, Roboto, Geist, Geist_Mono } from "next/font/google";
 
+import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/auth-context";
 import { ThemeProvider } from "@/context/theme-context";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
+        <Toaster richColors />
       </body>
     </html>
   );
