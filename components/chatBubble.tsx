@@ -40,7 +40,7 @@ const ChatBubble = ({ message }: { message: ChatMessage }) => {
             : "bg-neutral-200 dark:bg-neutral-600"
         }`}
       >
-        <div className="text-neutral-900 dark:text-neutral-100">
+        <div className="text-neutral-900 dark:text-neutral-100 break-words">
           {message.text}
         </div>
       </div>
