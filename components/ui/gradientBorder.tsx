@@ -82,7 +82,7 @@ export function GradientBorder({
         widthClass,
         roundedClass,
         showGradientBorder
-          ? "bg-conic/decreasing dark:from-violet-700 dark:via-lime-300 dark:to-violet-700 from-violet-500 via-lime-500 to-violet-500"
+          ? "bg-linear-to-br/increasing dark:from-red-700 dark:via-lime-300 dark:to-violet-700 from-red-500 via-lime-500 to-violet-500"
           : defaultBorderColor,
         className
       )}
