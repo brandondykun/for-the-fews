@@ -52,83 +52,130 @@ export default function ChatPage() {
         <Header title="AI Chat" showBackButton={true} showSignOut={true} />
 
         <main className="flex flex-1 flex-row max-h-[calc(100vh-64px)]">
-          <div className="border-b border-neutral-200 dark:border-neutral-900 px-4 py-4 bg-neutral-100 dark:bg-neutral-900 min-w-64 flex flex-col">
-            <h3 className="text-sm font-medium mb-1 text-neutral-700 dark:text-neutral-300">
-              Chat Mode:
-            </h3>
-            <p className="max-w-[200px] text-xs text-neutral-500 dark:text-neutral-400 mb-4">
-              Pick a chat mode to set the tone for the conversation.
-            </p>
-            <div className="flex flex-1 flex-col space-y-3">
-              <ChatModeButton
-                chatMode={chatMode}
-                setChatMode={handleChatModeChange}
-                buttonMode="fart"
-                text="Gassy"
-                icon="💨"
-              />
-
-              <ChatModeButton
-                chatMode={chatMode}
-                setChatMode={handleChatModeChange}
-                buttonMode="pirate"
-                text="Pirate"
-                icon="🏴‍☠️"
-              />
-              <ChatModeButton
-                chatMode={chatMode}
-                setChatMode={handleChatModeChange}
-                buttonMode="linus"
-                text="Linus"
-                icon="🐕"
-              />
-              <ChatModeButton
-                chatMode={chatMode}
-                setChatMode={handleChatModeChange}
-                buttonMode="minecraft"
-                text="Minecraft"
-                icon="⛏️"
-              />
-              <ChatModeButton
-                chatMode={chatMode}
-                setChatMode={handleChatModeChange}
-                buttonMode="comfort"
-                text="Comfort"
-                icon="🤗"
-              />
-              <div className="flex flex-1 flex-col justify-end items-center">
-                <div className="w-full mb-4 p-3 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-200 dark:border-neutral-700">
-                  <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                    Daily Messages Limit
-                  </h4>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-sm font-semibold ${
-                        isLimitReached
-                          ? "text-red-600 dark:text-red-400"
-                          : remaining <= 10
-                            ? "text-yellow-600 dark:text-yellow-400"
-                            : "text-green-600 dark:text-green-400"
-                      }`}
-                    >
-                      {remaining} left
-                    </span>
-                    <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                      / {DAILY_MESSAGE_LIMIT}
-                    </span>
-                  </div>
-                  {isLimitReached && (
-                    <p className="text-xs text-red-600 dark:text-red-400 mt-1">
-                      Limit reached! Resets at midnight.
-                    </p>
-                  )}
-                </div>
-                <p className="max-w-[200px] text-sm text-neutral-500 dark:text-neutral-400 mb-4">
-                  Note: Your chats are not currently saved. If you refresh the
-                  page, your chats will be lost.
-                </p>
+          <div className="border-b border-neutral-200 dark:border-neutral-900 bg-neutral-100 dark:bg-neutral-900 min-w-64 h-[calc(100vh-64px)]">
+            <div className="w-full p-3 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-20">
+              <h4 className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                Daily Messages Limit
+              </h4>
+              <div className="flex items-center gap-2">
+                <span
+                  className={`text-sm font-semibold ${
+                    isLimitReached
+                      ? "text-red-600 dark:text-red-400"
+                      : remaining <= 10
+                        ? "text-yellow-600 dark:text-yellow-400"
+                        : "text-green-600 dark:text-green-400"
+                  }`}
+                >
+                  {remaining} left
+                </span>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                  / {DAILY_MESSAGE_LIMIT}
+                </span>
               </div>
+              {isLimitReached && (
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                  Limit reached! Resets at midnight.
+                </p>
+              )}
             </div>
+            <ScrollArea className="h-[calc(100vh-134px)] overflow-y-hidden flex flex-col flex-1 ">
+              <div className="px-4 pt-4">
+                <h3 className="text-sm font-medium mb-1 text-neutral-700 dark:text-neutral-300">
+                  Chat Mode:
+                </h3>
+                <p className="max-w-[200px] text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+                  Pick a chat mode to set the tone for the conversation.
+                </p>
+                {/* <div className="flex flex-1 flex-col"> */}
+                <div className="overflow-hidden flex flex-col flex-1 gap-2 mb-4">
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="fart"
+                    text="Gassy"
+                    icon="💨"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="pirate"
+                    text="Pirate"
+                    icon="🏴‍☠️"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="linus"
+                    text="Linus"
+                    icon="🐕"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="minecraft"
+                    text="Minecraft"
+                    icon="⛏️"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="comfort"
+                    text="Comfort"
+                    icon="🤗"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="viking"
+                    text="Viking"
+                    icon="🛡️"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="ghost"
+                    text="Ghost"
+                    icon="👻"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="classBully"
+                    text="Class Bully"
+                    icon="👿"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="bob"
+                    text="Bob"
+                    icon="👨"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="boomer"
+                    text="Boomer"
+                    icon="👨‍🦳"
+                  />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="embarrassingParent"
+                    text="Embarrassing Parent"
+                    icon="🧔‍♂️"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <p className="max-w-[200px] text-xs text-neutral-500 dark:text-neutral-400 mb-4">
+                    Note: Your chats are not currently saved. If you refresh the
+                    page, your chats will be lost.
+                  </p>
+                </div>
+              </div>
+            </ScrollArea>
+            {/* </div> */}
           </div>
           <div className="flex-1 max-w-4xl mx-auto pb-6 px-4 sm:px-6 lg:px-8 flex flex-col">
             <ScrollArea className="flex-1 overflow-y-scroll px-4">

@@ -1,6 +1,17 @@
 import { Timestamp } from "firebase/firestore";
 
-export type ChatMode = "fart" | "pirate" | "linus" | "minecraft" | "comfort";
+export type ChatMode =
+  | "fart"
+  | "pirate"
+  | "linus"
+  | "minecraft"
+  | "comfort"
+  | "viking"
+  | "ghost"
+  | "classBully"
+  | "bob"
+  | "boomer"
+  | "embarrassingParent";
 
 // User document types
 export interface UserDocument {

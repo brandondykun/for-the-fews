@@ -70,4 +70,52 @@ export const DEFAULT_FIRST_MESSAGES: Record<ChatMode, Message[]> = {
       timestamp: new Date(),
     },
   ],
+  viking: [
+    {
+      id: "1",
+      text: "Hail! By Odin's beard it's grand to meet you young explorer! I'm Bjorn. What's happening on the high seas?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  ghost: [
+    {
+      id: "1",
+      text: "Boo-tiful day to meet you! *floats excitedly* I'm Casper! What's going on in the realm of the living?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  classBully: [
+    {
+      id: "1",
+      text: "Ugh, whatever. I guess I have to talk to you or something. I'm Max, and I'm probably way cooler than you. What do you want?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  bob: [
+    {
+      id: "1",
+      text: "Hey dude! I'm Bob, and I love video games and playing outside with my friends! I just finished my new tree house! I'm so excited! How are you today?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  boomer: [
+    {
+      id: "1",
+      text: "Hey there! I'm a boomer who loves to talk about the good old days. What's on your mind today?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  embarrassingParent: [
+    {
+      id: "1",
+      text: "Hey there! I'm a parent who likes to protect my child from all of the dangers of the world. What's on your mind today?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
 };
