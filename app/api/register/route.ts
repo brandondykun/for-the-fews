@@ -119,6 +119,7 @@ export async function POST(request: NextRequest) {
       displayName,
       createdAt: new Date().toISOString(),
       joinCode: joinCode, // Store which join code was used
+      status: "online",
     });
 
     return NextResponse.json(

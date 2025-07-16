@@ -3,7 +3,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { User, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
+
+import { devError, devWarn } from "@/lib/dev-utils";
 
 import { auth, db } from "../lib/firebase";
 import { UserDocument } from "../types";
@@ -22,52 +24,56 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext);
 
-/**
- * Fetch user document from Firestore
- */
-async function fetchUserDocument(userId: string): Promise<UserDocument | null> {
-  try {
-    const userDocRef = doc(db, "users", userId);
-    const userDocSnap = await getDoc(userDocRef);
-
-    if (userDocSnap.exists()) {
-      return userDocSnap.data() as UserDocument;
-    } else {
-      if (process.env.NODE_ENV === "development") {
-        console.warn(`User document not found for user: ${userId}`);
-      }
-      return null;
-    }
-  } catch (error) {
-    if (process.env.NODE_ENV === "development") {
-      console.error("Error fetching user document:", error);
-    }
-    return null;
-  }
-}
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userDocument, setUserDocument] = useState<UserDocument | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let userDocUnsubscribe: Unsubscribe | null = null;
+
     const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
       setUser(user);
 
+      // Clean up previous user document listener
+      if (userDocUnsubscribe) {
+        userDocUnsubscribe();
+        userDocUnsubscribe = null;
+      }
+
       if (user) {
-        // Fetch user document from Firestore
-        const userDoc = await fetchUserDocument(user.uid);
-        setUserDocument(userDoc);
+        // Set up real-time listener for user document
+        const userDocRef = doc(db, "users", user.uid);
+        userDocUnsubscribe = onSnapshot(
+          userDocRef,
+          (userDocSnap) => {
+            if (userDocSnap.exists()) {
+              setUserDocument(userDocSnap.data() as UserDocument);
+            } else {
+              devWarn(`User document not found for user: ${user.uid}`);
+              setUserDocument(null);
+            }
+            setLoading(false);
+          },
+          (error) => {
+            devError("Error listening to user document:", error);
+            setUserDocument(null);
+            setLoading(false);
+          }
+        );
       } else {
         // Clear user document when user logs out
         setUserDocument(null);
+        setLoading(false);
       }
-
-      setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      if (userDocUnsubscribe) {
+        userDocUnsubscribe();
+      }
+    };
   }, []);
 
   return (

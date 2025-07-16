@@ -13,12 +13,20 @@ export type ChatMode =
   | "boomer"
   | "embarrassingParent";
 
+export type UserStatus = "online" | "offline" | "away" | "brb";
+
 // User document types
 export interface UserDocument {
   email: string;
   displayName: string;
   createdAt: string; // ISO string
   joinCode: string; // The join code used for registration
+  status: UserStatus;
+}
+
+// User document with Firestore document ID
+export interface UserDocumentWithId extends UserDocument {
+  id: string;
 }
 
 // Rate limiting types
@@ -69,6 +77,7 @@ export interface ChatMessage {
 
 export type ChatRoomType = "general" | "private" | "group";
 export interface ChatRoom {
+  id: string;
   name: string;
   type: ChatRoomType;
   members: string[];
