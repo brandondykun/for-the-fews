@@ -94,7 +94,7 @@ export default function ChatPage() {
 
   return (
     <ProtectedRoute>
-      <div className="h-dvh bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-200 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-200 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 flex flex-col">
         <Header title="Chat" showBackButton={true} />
         <main className="w-screen flex flex-1 max-h-[calc(100vh-64px)]">
           {loading ? (
