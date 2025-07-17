@@ -189,7 +189,7 @@ export default function ChatArea({ currentRoomId }: Props) {
         src="/sounds/notification-sound-2.wav"
       />
       <ScrollArea
-        className="flex-1 px-4 md:px-8 overflow-y-scroll"
+        className="flex-1 px-2 xs:px-3 sm:px-4 md:px-8 overflow-y-scroll"
         ref={scrollAreaRef}
       >
         <div className="space-y-3 py-4">

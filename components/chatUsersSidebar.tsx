@@ -16,7 +16,7 @@ function ChatUsersSidebar({
   const { users, loading: usersLoading } = useRoomUsers(currentRoomId || "");
 
   return (
-    <aside className="bg-neutral-200 dark:bg-neutral-900 px-2 py-2 min-w-[250px] max-w-[250px]">
+    <aside className="bg-neutral-200 dark:bg-neutral-900 px-2 py-2 min-w-[250px] max-w-[250px] hidden md:block">
       {currentRoomName && (
         <h2 className="text-md font-semibold text-neutral-700 dark:text-neutral-200 mb-4 break-words">
           {currentRoomName} Chat

@@ -34,15 +34,13 @@ const ChatBubble = ({ message }: { message: ChatMessage }) => {
         </div>
       )}
       <div
-        className={`flex flex-col py-1.5 px-4 rounded-xl max-w-xl ${
+        className={`py-1.5 px-4 rounded-xl max-w-[200px] xs:max-w-[280px] sm:max-w-sm lg:max-w-md xl:max-w-lg text-neutral-900 dark:text-neutral-100 break-words ${
           isCurrentUser
             ? "bg-sky-300 dark:bg-sky-700"
             : "bg-neutral-200 dark:bg-neutral-600"
         }`}
       >
-        <div className="text-neutral-900 dark:text-neutral-100 break-words">
-          {message.text}
-        </div>
+        {message.text}
       </div>
       <div
         className={`text-[11px] text-neutral-500 dark:text-neutral-500 pt-1 ${isCurrentUser ? "text-right pr-2" : "pl-2"}`}

@@ -84,12 +84,12 @@ export default function Header({
                   size="sm"
                   className="gap-2 dark:hover:bg-neutral-700"
                 >
-                  <ArrowLeft size={16} />
-                  Back to Dashboard
+                  <ArrowLeft size={24} />
+                  <span className="hidden sm:block">Back to Dashboard</span>
                 </Button>
               </Link>
             )}
-            <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+            <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 hidden sm:block">
               {title}
             </h1>
           </div>
