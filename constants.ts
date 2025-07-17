@@ -81,7 +81,7 @@ export const DEFAULT_FIRST_MESSAGES: Record<ChatMode, Message[]> = {
   ghost: [
     {
       id: "1",
-      text: "Boo-tiful day to meet you! *floats excitedly* I'm Casper! What's going on in the realm of the living?",
+      text: "No need to tell me about your day. I've been watching. What would you like to know from the other side?",
       isUser: false,
       timestamp: new Date(),
     },
