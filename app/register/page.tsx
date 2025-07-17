@@ -143,7 +143,6 @@ export default function RegisterPage() {
       subtitle="Create your account to become one of the Few."
       cardTitle="Register"
       cardDescription="Create your account to join the exclusive community"
-      bottomPadding={true}
     >
       <form onSubmit={handleRegister} className="space-y-4">
         <HoneypotFields
@@ -171,7 +170,7 @@ export default function RegisterPage() {
           <Label htmlFor="displayName" className="dark:text-neutral-300">
             Display Name{" "}
             <span className="text-xs dark:text-neutral-400 text-neutral-600 font-light">
-              (This will be shown to other users)
+              (shown to other users)
             </span>
           </Label>
           <Input

@@ -38,7 +38,12 @@ export function PageTitle({
   className,
 }: Omit<GradientTextProps, "variant">) {
   return (
-    <h1 className={cn("text-6xl font-bold font-open-sans", className)}>
+    <h1
+      className={cn(
+        "text-xl xs:text-3xl sm:text-4xl md:text-5xl font-bold font-open-sans text-center px-4",
+        className
+      )}
+    >
       <GradientText variant="primary">{children}</GradientText>
     </h1>
   );

@@ -78,7 +78,7 @@ export function GradientBorder({
   return (
     <div
       className={cn(
-        "relative overflow-hidden",
+        "relative overflow-hidden inline-block",
         widthClass,
         roundedClass,
         showGradientBorder

@@ -37,18 +37,20 @@ export function AuthFormLayout({
         {/* Header Section */}
         <div className="flex flex-col items-center justify-center gap-4 mt-18 mb-12">
           <PageTitle className="font-light">{title}</PageTitle>
-          <h2 className="text-center text-neutral-400">{subtitle}</h2>
+          <h2 className="text-center text-neutral-400 px-4">{subtitle}</h2>
         </div>
 
         {/* Form Card */}
         <div
-          className={`flex justify-center items-center ${
-            bottomPadding ? "mb-8" : ""
-          }`}
+          className={`px-4 xs:px-6 text-center ${bottomPadding ? "mb-8" : ""}`}
         >
-          <GradientBorder roundedSize="2xl" width={1}>
-            <Card className="sm:w-sm md:w-md dark:bg-neutral-950 dark:border-neutral-900">
-              <CardHeader>
+          <GradientBorder
+            roundedSize="2xl"
+            width={1}
+            className="w-full sm:w-sm md:w-md mb-12"
+          >
+            <Card className="dark:bg-neutral-950 dark:border-neutral-900">
+              <CardHeader className="px-4 sm:px-6 text-center sm:text-left">
                 <CardTitle className="mb-2">
                   <SectionTitle>{cardTitle}</SectionTitle>
                 </CardTitle>
@@ -56,7 +58,7 @@ export function AuthFormLayout({
                   {cardDescription}
                 </CardDescription>
               </CardHeader>
-              <CardContent>{children}</CardContent>
+              <CardContent className="px-4 sm:px-6">{children}</CardContent>
             </Card>
           </GradientBorder>
         </div>
