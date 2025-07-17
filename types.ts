@@ -11,7 +11,8 @@ export type ChatMode =
   | "classBully"
   | "bob"
   | "boomer"
-  | "embarrassingParent";
+  | "embarrassingParent"
+  | "hacker";
 
 export type UserStatus = "online" | "offline" | "away" | "brb";
 

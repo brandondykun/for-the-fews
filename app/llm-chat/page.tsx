@@ -166,6 +166,13 @@ export default function ChatPage() {
                     text="Embarrassing Parent"
                     icon="🧔‍♂️"
                   />
+                  <ChatModeButton
+                    chatMode={chatMode}
+                    setChatMode={handleChatModeChange}
+                    buttonMode="hacker"
+                    text="Hacker"
+                    icon="🧑‍💻"
+                  />
                 </div>
                 <div className="flex flex-col">
                   <p className="max-w-[200px] text-xs text-neutral-500 dark:text-neutral-400 mb-4">

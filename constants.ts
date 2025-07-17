@@ -118,4 +118,12 @@ export const DEFAULT_FIRST_MESSAGES: Record<ChatMode, Message[]> = {
       timestamp: new Date(),
     },
   ],
+  hacker: [
+    {
+      id: "1",
+      text: "Hello sir, your default browser has been infected with a dangerous virus which has hacked your information and sent it off. It has now been sold to the dark web. Contact 724-561-7433 to help fix it. Or would you like me to help you right now?",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
 };
