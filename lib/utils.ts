@@ -196,3 +196,39 @@ export function buildSystemMessage(mode: ChatMode) {
     content: systemMessages[mode],
   };
 }
+
+export function getChatModeLabel(mode: ChatMode): string {
+  const labels = {
+    fart: "Gassy",
+    pirate: "Pirate",
+    linus: "Linus",
+    minecraft: "Minecraft",
+    comfort: "Comfort",
+    viking: "Viking",
+    ghost: "Ghost",
+    classBully: "Class Bully",
+    bob: "Bob",
+    boomer: "Boomer",
+    embarrassingParent: "Embarrassing Parent",
+    hacker: "Hacker",
+  };
+  return labels[mode];
+}
+
+export function getChatModeIcon(mode: ChatMode): string {
+  const icons = {
+    fart: "💨",
+    pirate: "🏴‍☠️",
+    linus: "🐕",
+    minecraft: "⛏️",
+    comfort: "🤗",
+    viking: "🛡️",
+    ghost: "👻",
+    classBully: "👿",
+    bob: "👨",
+    boomer: "👨‍🦳",
+    embarrassingParent: "🧔‍♂️",
+    hacker: "🧑‍💻",
+  };
+  return icons[mode];
+}
