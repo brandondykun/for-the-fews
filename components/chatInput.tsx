@@ -1,8 +1,6 @@
 import React from "react";
 
-import { Send } from "lucide-react";
-
-import { MAX_MESSAGE_CHARACTERS } from "@/constants";
+import { X, ArrowUp } from "lucide-react";
 
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
@@ -13,6 +11,9 @@ interface Props {
   setInputMessage: (value: string) => void;
   handleKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   isSubmitting: boolean;
+  placeholder?: string;
+  maxLength?: number;
+  disabled?: boolean;
 }
 
 const ChatInput = React.forwardRef<HTMLTextAreaElement, Props>(
@@ -23,42 +24,64 @@ const ChatInput = React.forwardRef<HTMLTextAreaElement, Props>(
       setInputMessage,
       handleKeyDown,
       isSubmitting,
+      placeholder,
+      maxLength,
+      disabled,
     },
     ref
   ) => {
+    const handleClear = () => {
+      setInputMessage("");
+      if (ref && "current" in ref) {
+        ref.current?.focus();
+      }
+    };
+
     return (
-      <div className="px-4 border-neutral-200 dark:border-neutral-700">
-        <form onSubmit={handleFormSubmit} className="space-y-2">
-          <div className="flex space-x-2 items-center">
+      <div className="max-w-3xl mx-auto flex w-full">
+        <form
+          onSubmit={handleFormSubmit}
+          className="space-y-2 flex flex-col flex-1"
+        >
+          <div className="bg-neutral-200/70 border-neutral-200/90 dark:bg-neutral-700/70 rounded-[28px] border dark:border-neutral-700/80 p-3">
             <Textarea
               ref={ref}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your message..."
-              className="flex-1 min-h-[40px] max-h-[120px] resize-none dark:bg-neutral-700 dark:border-neutral-700 dark:text-neutral-100 dark:placeholder-neutral-400 rounded-2xl focus-visible:ring-[0px] border-neutral-200 focus-visible:border-neutral-200 md:text-base px-3 py-3 shadow-neutral-300/40 shadow-md dark:shadow-neutral-900/40"
-              disabled={isSubmitting}
-              maxLength={MAX_MESSAGE_CHARACTERS}
-              rows={1}
+              placeholder={placeholder}
+              className="max-h-[250px] min-h-[48px] p-2 resize-none dark:text-neutral-100 placeholder:text-neutral-500 dark:placeholder-neutral-400 focus-visible:ring-[0px] border-none focus-visible:border-none md:text-base bg-transparent dark:bg-transparent shadow-none"
+              disabled={isSubmitting || disabled}
+              maxLength={maxLength}
             />
-            <Button
-              type="submit"
-              disabled={!inputMessage.trim() || isSubmitting}
-              className="h-10 px-3 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white disabled:bg-neutral-300 dark:disabled:bg-neutral-600"
-            >
-              <Send size={16} />
-            </Button>
-          </div>
-          <div className="flex justify-between items-center mb-2">
-            <span
-              className={`text-xs ${
-                inputMessage.length >= MAX_MESSAGE_CHARACTERS
-                  ? "text-red-500"
-                  : "text-neutral-500 dark:text-neutral-400"
-              }`}
-            >
-              {inputMessage.length}/{MAX_MESSAGE_CHARACTERS}
-            </span>
+            <div className="flex justify-between items-center pt-1">
+              <Button
+                type="button"
+                onClick={handleClear}
+                disabled={!inputMessage.trim() || isSubmitting}
+                className="h-9 w-9 px-3 rounded-full bg-transparent border border-neutral-400 dark:border-neutral-600 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 disabled:opacity-60"
+              >
+                <X size={16} />
+              </Button>
+              {maxLength ? (
+                <div
+                  className={`text-xs mt-4 ${
+                    inputMessage.length >= maxLength
+                      ? "text-red-500"
+                      : "text-neutral-500 dark:text-neutral-400"
+                  }`}
+                >
+                  {inputMessage.length}/{maxLength}
+                </div>
+              ) : null}
+              <Button
+                type="submit"
+                disabled={!inputMessage.trim() || isSubmitting}
+                className="h-9 w-9 rounded-full bg-neutral-800 dark:bg-neutral-200 dark:hover:bg-neutral-50 hover:bg-neutral-900 text-neutral-100 dark:text-neutral-900 disabled:opacity-60"
+              >
+                <ArrowUp size={24} strokeWidth={3} />
+              </Button>
+            </div>
           </div>
         </form>
       </div>

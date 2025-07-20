@@ -13,8 +13,6 @@ import {
 
 import ChatArea from "@/components/chatArea";
 import ChatUsersSidebar from "@/components/chatUsersSidebar";
-import Header from "@/components/header";
-import ProtectedRoute from "@/components/protected-route";
 import { LoadingScreen } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -93,23 +91,20 @@ export default function ChatPage() {
   }, [user]);
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-neutral-100 to-neutral-200 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 flex flex-col">
-        <Header title="Chat" showBackButton={true} />
-        <main className="w-screen flex flex-1 max-h-[calc(100vh-64px)]">
-          {loading ? (
-            <LoadingScreen />
-          ) : (
-            <>
-              <ChatUsersSidebar
-                currentRoomId={stableCurrentRoom?.id || null}
-                currentRoomName={stableCurrentRoom?.name || null}
-              />
-              <ChatArea currentRoomId={stableCurrentRoom?.id || null} />
-            </>
-          )}
-        </main>
+    <div className="bg-neutral-100 dark:bg-neutral-800 flex flex-col h-[calc(100dvh-64px)]">
+      <div className="w-screen flex flex-1 h-full">
+        {loading ? (
+          <LoadingScreen />
+        ) : (
+          <>
+            <ChatUsersSidebar
+              currentRoomId={stableCurrentRoom?.id || null}
+              currentRoomName={stableCurrentRoom?.name || null}
+            />
+            <ChatArea currentRoomId={stableCurrentRoom?.id || null} />
+          </>
+        )}
       </div>
-    </ProtectedRoute>
+    </div>
   );
 }

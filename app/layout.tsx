@@ -32,15 +32,15 @@ export const metadata: Metadata = {
   description: "A secure platform with AI chat capabilities",
 };
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scrollbar-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${openSans.variable} ${roboto.variable} ${roboto.className} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${openSans.variable} ${roboto.variable} ${roboto.className} antialiased h-dvh scrollbar-hidden`}
       >
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>

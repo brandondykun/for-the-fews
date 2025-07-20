@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ColorModeSwitch from "@/components/ui/colorModeSwitch";
 import { PageTitle, SectionTitle } from "@/components/ui/gradient-text";
 import { GradientBorder } from "@/components/ui/gradientBorder";
 
@@ -29,9 +28,9 @@ export function AuthFormLayout({
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-neutral-50 via-neutral-300 to-neutral-50 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-900">
       {/* Dark Mode Toggle */}
-      <div className="absolute top-4 right-4">
+      {/* <div className="absolute top-4 right-4">
         <ColorModeSwitch />
-      </div>
+      </div> */}
 
       <div className={`flex flex-col flex-1 ${bottomPadding ? "p-4" : ""}`}>
         {/* Header Section */}

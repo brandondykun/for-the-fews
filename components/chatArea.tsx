@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import ChatBubble from "@/components/chatBubble";
 import ChatInput from "@/components/chatInput";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { MAX_MESSAGE_CHARACTERS } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { devError } from "@/lib/dev-utils";
 import { db } from "@/lib/firebase";
@@ -103,7 +104,6 @@ export default function ChatArea({ currentRoomId }: Props) {
   // Handle Enter keydown for textarea to send message
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      // e.preventDefault();
       handleSubmit(e);
     }
   };
@@ -179,7 +179,7 @@ export default function ChatArea({ currentRoomId }: Props) {
   }
 
   return (
-    <div className="flex flex-col overflow-hidden w-full xl:w-[1000px] lg:mx-auto flex-1">
+    <div className="flex flex-1 flex-col overflow-hidden h-[calc(100dvh-64px)] relative">
       <audio
         ref={outgoingMessageSound}
         src="/sounds/notification-sound-1.wav"
@@ -188,36 +188,41 @@ export default function ChatArea({ currentRoomId }: Props) {
         ref={incomingMessageSound}
         src="/sounds/notification-sound-2.wav"
       />
-      <ScrollArea
-        className="flex-1 px-2 xs:px-3 sm:px-4 md:px-8 overflow-y-scroll"
-        ref={scrollAreaRef}
-      >
-        <div className="space-y-3 py-4">
-          {!messages || messages.length === 0 ? (
-            <div className="text-center pb-8 pt-16">
-              <p className="text-neutral-500 dark:text-neutral-400">
-                {!messages
-                  ? "Loading messages..."
-                  : "No messages yet. Start the conversation!"}
-              </p>
-            </div>
-          ) : (
-            messages.map((message) => (
-              <ChatBubble key={message.id} message={message} />
-            ))
-          )}
-          <div ref={messagesEndRef} />
+      {!messages || messages.length === 0 ? (
+        <div className="text-center pb-8 pt-16 flex flex-1 items-center justify-center">
+          <p className="text-neutral-500 dark:text-neutral-400">
+            {!messages
+              ? "Loading messages..."
+              : "No messages yet. Start the conversation!"}
+          </p>
         </div>
-      </ScrollArea>
-
-      <ChatInput
-        handleFormSubmit={handleSubmit}
-        inputMessage={inputMessage}
-        setInputMessage={setInputMessage}
-        handleKeyDown={handleKeyDown}
-        isSubmitting={isSubmitting}
-        ref={textareaRef}
-      />
+      ) : (
+        <ScrollArea
+          className="flex flex-1 overflow-y-scroll px-2 h-[calc(100dvh-64px)]"
+          ref={scrollAreaRef}
+        >
+          <div className="space-y-3 pt-4 flex-1 max-w-3xl mx-auto px-2 relative h-[calc(100dvh-64px)]">
+            {messages.map((message) => (
+              <ChatBubble key={message.id} message={message} />
+            ))}
+            <div ref={messagesEndRef} className="mb-48 h-42 sm:h-36" />
+          </div>
+        </ScrollArea>
+      )}
+      <div className="absolute bottom-0 left-0 right-0 px-4">
+        <div className="max-w-3xl mx-auto bg-neutral-50 dark:bg-neutral-800 rounded-t-[28px] pb-4">
+          <ChatInput
+            handleFormSubmit={handleSubmit}
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            handleKeyDown={handleKeyDown}
+            isSubmitting={isSubmitting}
+            ref={textareaRef}
+            placeholder="Type your message..."
+            maxLength={MAX_MESSAGE_CHARACTERS}
+          />
+        </div>
+      </div>
     </div>
   );
 }

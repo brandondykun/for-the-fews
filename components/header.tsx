@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
@@ -30,18 +31,15 @@ import UserStatusIcon from "./ui/userStatusIcon";
 
 interface HeaderProps {
   title: string;
-  showBackButton?: boolean;
   backButtonUrl?: string;
-  showSignOut?: boolean;
 }
 
 export default function Header({
   title,
-  showBackButton = false,
   backButtonUrl = "/dashboard",
-  showSignOut = true,
 }: HeaderProps) {
   const { user, userDocument } = useAuth();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     try {
@@ -69,15 +67,15 @@ export default function Header({
     }
   };
 
-  const headerClassName =
-    "bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700";
+  // show back button if not on the root dashboard page
+  const shouldShowBackButton = pathname !== "/dashboard";
 
   return (
-    <header className={headerClassName}>
+    <header className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-50">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
-            {showBackButton && (
+            {shouldShowBackButton && (
               <Link href={backButtonUrl}>
                 <Button
                   variant="ghost"
@@ -95,81 +93,78 @@ export default function Header({
           </div>
           <div className="flex items-center space-x-4 gap-2">
             <ColorModeSwitch />
-            {showSignOut && (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hover:opacity-80">
-                  {userDocument ? (
-                    <div className="relative">
-                      <div className="absolute -top-[4px] -right-[4px] p-[2px] rounded-full bg-neutral-50 dark:bg-neutral-800">
-                        <UserStatusIcon
-                          status={userDocument.status}
-                          tooltipSide="left"
-                        />
-                      </div>
-                      <UserIcon user={userDocument} />
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="hover:opacity-80">
+                {userDocument ? (
+                  <div className="relative">
+                    <div className="absolute -top-[4px] -right-[4px] p-[2px] rounded-full bg-neutral-50 dark:bg-neutral-800">
+                      <UserStatusIcon
+                        status={userDocument.status}
+                        tooltipSide="left"
+                      />
                     </div>
-                  ) : (
-                    <Settings
-                      className="text-neutral-700 dark:text-neutral-300"
-                      size={24}
-                    />
-                  )}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onCloseAutoFocus={(e) => e.preventDefault()}
-                >
-                  <div className="-m-1">
-                    <div className="text-sm p-4 dark:bg-neutral-800/50 ">
-                      <div className="font-medium">
-                        {getUserDisplayName(userDocument, user)}
-                      </div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                        {getUserEmail(userDocument, user)}
-                      </div>
+                    <UserIcon user={userDocument} />
+                  </div>
+                ) : (
+                  <Settings
+                    className="text-neutral-700 dark:text-neutral-300"
+                    size={24}
+                  />
+                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
+                <div className="-m-1">
+                  <div className="text-sm p-4 dark:bg-neutral-800/50 ">
+                    <div className="font-medium">
+                      {getUserDisplayName(userDocument, user)}
+                    </div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                      {getUserEmail(userDocument, user)}
                     </div>
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          className="flex items-center justify-between cursor-pointer"
-                          onClick={() => updateUserStatus("online")}
-                        >
-                          <div>Online</div>
-                          <UserStatusIcon status="online" tooltipSide="left" />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex items-center justify-between cursor-pointer"
-                          onClick={() => updateUserStatus("brb")}
-                        >
-                          <div>Brb</div>
-                          <UserStatusIcon status="brb" tooltipSide="left" />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex items-center justify-between cursor-pointer"
-                          onClick={() => updateUserStatus("away")}
-                        >
-                          <div>Away</div>
-                          <UserStatusIcon status="away" tooltipSide="left" />
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="flex items-center justify-between cursor-pointer"
-                          onClick={() => updateUserStatus("offline")}
-                        >
-                          <div>Offline</div>{" "}
-                          <UserStatusIcon status="offline" tooltipSide="left" />
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Log Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => updateUserStatus("online")}
+                      >
+                        <div>Online</div>
+                        <UserStatusIcon status="online" tooltipSide="left" />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => updateUserStatus("brb")}
+                      >
+                        <div>Brb</div>
+                        <UserStatusIcon status="brb" tooltipSide="left" />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => updateUserStatus("away")}
+                      >
+                        <div>Away</div>
+                        <UserStatusIcon status="away" tooltipSide="left" />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => updateUserStatus("offline")}
+                      >
+                        <div>Offline</div>{" "}
+                        <UserStatusIcon status="offline" tooltipSide="left" />
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Log Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
