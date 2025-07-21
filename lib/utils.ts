@@ -232,3 +232,18 @@ export function getChatModeIcon(mode: ChatMode): string {
   };
   return icons[mode];
 }
+
+export function getHeaderTitle(pathname: string) {
+  if (pathname.startsWith("/games/tic-tac-toe")) {
+    return "Tic-Tac-Toe";
+  } else if (pathname.startsWith("/games")) {
+    return "Games";
+  } else if (pathname.startsWith("/dashboard")) {
+    return "Dashboard";
+  } else if (pathname.startsWith("/chat")) {
+    return "Chat";
+  } else if (pathname.startsWith("/llm-chat")) {
+    return "AI Chat";
+  }
+  return "For the Few's";
+}

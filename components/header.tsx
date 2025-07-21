@@ -32,11 +32,13 @@ import UserStatusIcon from "./ui/userStatusIcon";
 interface HeaderProps {
   title: string;
   backButtonUrl?: string;
+  backButtonText?: string;
 }
 
 export default function Header({
   title,
   backButtonUrl = "/dashboard",
+  backButtonText = "Back to Dashboard",
 }: HeaderProps) {
   const { user, userDocument } = useAuth();
   const pathname = usePathname();
@@ -83,7 +85,7 @@ export default function Header({
                   className="gap-2 dark:hover:bg-neutral-700"
                 >
                   <ArrowLeft size={24} />
-                  <span className="hidden sm:block">Back to Dashboard</span>
+                  <span className="hidden sm:block">{backButtonText}</span>
                 </Button>
               </Link>
             )}

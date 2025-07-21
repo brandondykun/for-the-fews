@@ -105,9 +105,11 @@ export default function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" className="w-full" disabled>
-              Coming Soon
-            </Button>
+            <Link href="/games">
+              <Button variant="outline" className="w-full">
+                Play Games
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
