@@ -43,19 +43,6 @@ const UserStatusIcon = ({
     tooltipText = "Online and active";
   }
 
-  if (status === "away") {
-    content = (
-      <div
-        className={cn(
-          sharedStyles,
-          "bg-neutral-400 dark:bg-neutral-500",
-          className
-        )}
-      />
-    );
-    tooltipText = "Away from computer";
-  }
-
   if (status === "brb") {
     content = (
       <div
