@@ -6,6 +6,7 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot, Unsubscribe } from "firebase/firestore";
 
 import { devError, devWarn } from "@/lib/dev-utils";
+import { updateUserStatus } from "@/lib/user-status";
 
 import { auth, db } from "../lib/firebase";
 import { UserDocument } from "../types";
@@ -42,6 +43,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       if (user) {
+        // auto update user status to online when logging in
+        await updateUserStatus(user, "online");
+
         // Set up real-time listener for user document
         const userDocRef = doc(db, "users", user.uid);
         userDocUnsubscribe = onSnapshot(

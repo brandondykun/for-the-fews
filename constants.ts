@@ -17,6 +17,7 @@ export const MAX_CONVERSATION_HISTORY = 4; // Number of previous messages to inc
 export const MAX_CONTENT_LENGTH = 1000; // Max length for sanitized message content
 export const DEFAULT_TEMPERATURE = 0.7;
 export const MAX_TOKENS = 1000;
+export const ONE_MINUTE_IN_MS = 60 * 1000; // 1 minute
 
 // Auth constants
 export const MIN_PASSWORD_LENGTH = 6;

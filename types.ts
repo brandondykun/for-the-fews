@@ -14,7 +14,7 @@ export type ChatMode =
   | "embarrassingParent"
   | "hacker";
 
-export type UserStatus = "online" | "offline" | "away" | "brb";
+export type UserStatus = "online" | "offline" | "brb";
 
 // User document types
 export interface UserDocument {

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { signOut } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
 import { ArrowLeft, Settings } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import ColorModeSwitch from "@/components/ui/colorModeSwitch";
@@ -20,9 +20,12 @@ import {
   DropdownMenuSubContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ONE_MINUTE_IN_MS } from "@/constants";
 import { useAuth } from "@/context/auth-context";
+import { useUserActivity } from "@/hooks/use-user-activity";
 import { devError } from "@/lib/dev-utils";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
+import { updateUserStatus } from "@/lib/user-status";
 import { getUserDisplayName, getUserEmail } from "@/lib/utils";
 import { UserStatus } from "@/types";
 
@@ -43,29 +46,27 @@ export default function Header({
   const { user, userDocument } = useAuth();
   const pathname = usePathname();
 
+  useUserActivity({ user, inactivityTimeout: 5 * ONE_MINUTE_IN_MS }); // 5 minutes
+
   const handleLogout = async () => {
     try {
       // Set user status to offline before signing out
-      await updateUserStatus("offline");
+      const result = await updateUserStatus(user, "offline");
+      if (!result.success) {
+        devError("Failed to update user status to offline:", result.error);
+        // Continue with logout even if status update fails
+      }
       await signOut(auth);
     } catch (error) {
       devError("Error signing out:", error);
     }
   };
 
-  const updateUserStatus = async (newStatus: UserStatus) => {
-    if (!user) {
-      devError("No user available to update status");
-      return;
-    }
-
-    try {
-      const userDocRef = doc(db, "users", user.uid);
-      await updateDoc(userDocRef, {
-        status: newStatus,
-      });
-    } catch (error) {
-      devError("Error updating user status:", error);
+  const handleStatusChange = async (newStatus: UserStatus) => {
+    const result = await updateUserStatus(user, newStatus);
+    if (!result.success) {
+      devError("Failed to update user status:", result.error);
+      toast.error("Failed to update your status");
     }
   };
 
@@ -133,28 +134,21 @@ export default function Header({
                     <DropdownMenuSubContent>
                       <DropdownMenuItem
                         className="flex items-center justify-between cursor-pointer"
-                        onClick={() => updateUserStatus("online")}
+                        onClick={() => handleStatusChange("online")}
                       >
                         <div>Online</div>
                         <UserStatusIcon status="online" tooltipSide="left" />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="flex items-center justify-between cursor-pointer"
-                        onClick={() => updateUserStatus("brb")}
+                        onClick={() => handleStatusChange("brb")}
                       >
                         <div>Brb</div>
                         <UserStatusIcon status="brb" tooltipSide="left" />
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="flex items-center justify-between cursor-pointer"
-                        onClick={() => updateUserStatus("away")}
-                      >
-                        <div>Away</div>
-                        <UserStatusIcon status="away" tooltipSide="left" />
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="flex items-center justify-between cursor-pointer"
-                        onClick={() => updateUserStatus("offline")}
+                        onClick={() => handleStatusChange("offline")}
                       >
                         <div>Offline</div>{" "}
                         <UserStatusIcon status="offline" tooltipSide="left" />

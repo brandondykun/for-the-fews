@@ -45,7 +45,7 @@ export default function AuthLayout({
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
-        <Toaster richColors />
+        <Toaster />
       </body>
     </html>
   );
