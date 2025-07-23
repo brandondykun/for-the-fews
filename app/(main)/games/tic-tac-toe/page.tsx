@@ -8,17 +8,21 @@ import { useWindowSize } from "react-use";
 import { Button } from "@/components/ui/button";
 import { GradientText } from "@/components/ui/gradient-text";
 import GradientBorder from "@/components/ui/gradientBorder";
+import { getVictoryLineClass } from "@/lib/utils";
+
+import VictoryLines from "./victory-lines";
 
 type Player = "X" | "O" | null;
 type Board = Player[];
 type GameStatus = "playing" | "won" | "draw";
 type Difficulty = "easy" | "medium" | "hard";
 
-interface GameState {
+export interface GameState {
   board: Board;
   currentPlayer: Player;
   status: GameStatus;
   winner: Player;
+  winningPattern: number[] | null;
 }
 
 const TicTacToe: React.FC = () => {
@@ -27,6 +31,7 @@ const TicTacToe: React.FC = () => {
     currentPlayer: "X",
     status: "playing",
     winner: null,
+    winningPattern: null,
   });
 
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -35,8 +40,10 @@ const TicTacToe: React.FC = () => {
 
   const { width, height } = useWindowSize();
 
-  // Check for winner
-  const checkWinner = (board: Board): Player => {
+  // Check for winner and return both winner and winning pattern
+  const checkWinner = (
+    board: Board
+  ): { winner: Player; winningPattern: number[] | null } => {
     const winPatterns = [
       [0, 1, 2],
       [3, 4, 5],
@@ -51,10 +58,10 @@ const TicTacToe: React.FC = () => {
     for (const pattern of winPatterns) {
       const [a, b, c] = pattern;
       if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        return board[a];
+        return { winner: board[a], winningPattern: pattern };
       }
     }
-    return null;
+    return { winner: null, winningPattern: null };
   };
 
   // Check if board is full
@@ -65,7 +72,7 @@ const TicTacToe: React.FC = () => {
   // Minimax algorithm for AI
   const minimax = React.useCallback(
     (board: Board, depth: number, isMaximizing: boolean): number => {
-      const winner = checkWinner(board);
+      const { winner } = checkWinner(board);
 
       if (winner === "O") return 10 - depth;
       if (winner === "X") return depth - 10;
@@ -166,7 +173,7 @@ const TicTacToe: React.FC = () => {
     const newBoard = [...gameState.board];
     newBoard[index] = "X";
 
-    const winner = checkWinner(newBoard);
+    const { winner, winningPattern } = checkWinner(newBoard);
     const isFull = isBoardFull(newBoard);
 
     setGameState({
@@ -174,6 +181,7 @@ const TicTacToe: React.FC = () => {
       currentPlayer: "O",
       status: winner ? "won" : isFull ? "draw" : "playing",
       winner,
+      winningPattern,
     });
 
     // Show result overlay if game ended
@@ -193,7 +201,7 @@ const TicTacToe: React.FC = () => {
         const newBoard = [...gameState.board];
         newBoard[aiMove] = "O";
 
-        const winner = checkWinner(newBoard);
+        const { winner, winningPattern } = checkWinner(newBoard);
         const isFull = isBoardFull(newBoard);
 
         setGameState({
@@ -201,6 +209,7 @@ const TicTacToe: React.FC = () => {
           currentPlayer: "X",
           status: winner ? "won" : isFull ? "draw" : "playing",
           winner,
+          winningPattern,
         });
 
         // Show result overlay if game ended
@@ -221,6 +230,7 @@ const TicTacToe: React.FC = () => {
       currentPlayer: "X",
       status: "playing",
       winner: null,
+      winningPattern: null,
     });
     setIsAiThinking(false);
     setShowResultOverlay(false);
@@ -271,16 +281,13 @@ const TicTacToe: React.FC = () => {
       {showResultOverlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
           <div
-            className={`text-center px-4 animate-pulse ${
+            className={`text-center px-4 animate-flash ${
               gameState.winner === "X"
                 ? "text-lime-500 dark:text-lime-400"
                 : gameState.winner === "O"
                   ? "text-red-500 dark:text-red-400"
                   : "text-yellow-500 dark:text-yellow-400"
             }`}
-            style={{
-              animation: "flash 0.8s ease-in-out 5",
-            }}
           >
             <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-wider drop-shadow-2xl">
               {getResultMessage()}
@@ -336,7 +343,9 @@ const TicTacToe: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-4 w-52 h-52 sm:w-60 sm:h-60 mx-auto">
+          <div
+            className={`grid grid-cols-3 gap-1.5 sm:gap-2 mb-4 w-52 h-52 sm:w-60 sm:h-60 mx-auto relative ${getVictoryLineClass(gameState.winningPattern)}`}
+          >
             {gameState.board.map((cell, index) => (
               <button
                 key={index}
@@ -348,11 +357,15 @@ const TicTacToe: React.FC = () => {
                 transition-colors duration-200 disabled:cursor-not-allowed flex items-center justify-center
                 ${cell === "X" ? "text-blue-600 dark:text-blue-400" : "text-red-600 dark:text-red-400"}
                 ${!cell && gameState.status === "playing" && !isAiThinking ? "cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-600" : ""}
+                ${gameState.winningPattern?.includes(index) ? "bg-yellow-200 dark:bg-yellow-800 border-yellow-400 dark:border-yellow-600" : ""}
               `}
               >
                 {cell}
               </button>
             ))}
+
+            {/* Victory Line Overlay */}
+            {gameState.winningPattern && <VictoryLines gameState={gameState} />}
           </div>
 
           <div className="flex justify-center mb-3">

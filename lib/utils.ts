@@ -247,3 +247,32 @@ export function getHeaderTitle(pathname: string) {
   }
   return "For the Few's";
 }
+
+// Get victory line style for winning squares
+export const getVictoryLineClass = (pattern: number[] | null): string => {
+  if (!pattern) return "";
+
+  // Row lines
+  if (pattern.includes(0) && pattern.includes(1) && pattern.includes(2))
+    return "victory-line-row-1";
+  if (pattern.includes(3) && pattern.includes(4) && pattern.includes(5))
+    return "victory-line-row-2";
+  if (pattern.includes(6) && pattern.includes(7) && pattern.includes(8))
+    return "victory-line-row-3";
+
+  // Column lines
+  if (pattern.includes(0) && pattern.includes(3) && pattern.includes(6))
+    return "victory-line-col-1";
+  if (pattern.includes(1) && pattern.includes(4) && pattern.includes(7))
+    return "victory-line-col-2";
+  if (pattern.includes(2) && pattern.includes(5) && pattern.includes(8))
+    return "victory-line-col-3";
+
+  // Diagonal lines
+  if (pattern.includes(0) && pattern.includes(4) && pattern.includes(8))
+    return "victory-line-diagonal-1";
+  if (pattern.includes(2) && pattern.includes(4) && pattern.includes(6))
+    return "victory-line-diagonal-2";
+
+  return "";
+};
