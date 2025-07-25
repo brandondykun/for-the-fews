@@ -236,6 +236,8 @@ export function getChatModeIcon(mode: ChatMode): string {
 export function getHeaderTitle(pathname: string) {
   if (pathname.startsWith("/games/tic-tac-toe")) {
     return "Tic-Tac-Toe";
+  } else if (pathname.startsWith("/games/memory")) {
+    return "Memory Game";
   } else if (pathname.startsWith("/games")) {
     return "Games";
   } else if (pathname.startsWith("/dashboard")) {
