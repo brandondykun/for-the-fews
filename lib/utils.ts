@@ -278,3 +278,30 @@ export const getVictoryLineClass = (pattern: number[] | null): string => {
 
   return "";
 };
+
+// Format money as currency (abbreviated for stats)
+export const formatMoney = (amount: number): string => {
+  if (amount >= 1000000000000) {
+    return `$${(amount / 1000000000000).toFixed(2)}T`;
+  } else if (amount >= 1000000000) {
+    return `$${(amount / 1000000000).toFixed(2)}B`;
+  } else if (amount >= 1000000) {
+    return `$${(amount / 1000000).toFixed(2)}M`;
+  } else if (amount >= 1000) {
+    return `$${(amount / 1000).toFixed(2)}K`;
+  } else {
+    return `$${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
+};
+
+// Format money with full digits and commas
+export const formatMoneyFull = (amount: number): string => {
+  return `$${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+
+// Format time as MM:SS
+export const formatTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
