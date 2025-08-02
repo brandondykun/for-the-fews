@@ -246,6 +246,8 @@ export function getHeaderTitle(pathname: string) {
     return "Chat";
   } else if (pathname.startsWith("/llm-chat")) {
     return "AI Chat";
+  } else if (pathname.startsWith("/image-generation")) {
+    return "Image Generation";
   }
   return "For the Few's";
 }
