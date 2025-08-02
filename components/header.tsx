@@ -8,7 +8,6 @@ import { ArrowLeft, Settings } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import ColorModeSwitch from "@/components/ui/colorModeSwitch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -94,9 +93,7 @@ export default function Header({
               {title}
             </h1>
           </div>
-          <div className="flex items-center space-x-4 gap-2">
-            <ColorModeSwitch />
-
+          <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger className="hover:opacity-80">
                 {userDocument ? (
@@ -128,6 +125,9 @@ export default function Header({
                   </div>
                 </div>
                 <DropdownMenuSeparator />
+                <Link href="/settings" className="cursor-pointer">
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                </Link>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
                   <DropdownMenuPortal>

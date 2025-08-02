@@ -139,28 +139,30 @@ export default function DashboardPage() {
         <Card className="dark:bg-neutral-800 dark:border-neutral-700">
           <CardHeader>
             <CardTitle className="dark:text-neutral-100 flex flex-row gap-2 items-center text-xl">
-              <CircleUserRound size={22} />
-              Profile
+              <Settings size={22} />
+              Settings
             </CardTitle>
             <CardDescription className="dark:text-neutral-300">
-              View and manage your account settings
+              Configure your preferences and settings
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" className="w-full" disabled>
-              Coming Soon
-            </Button>
+            <Link href="/settings">
+              <Button variant="outline" className="w-full">
+                Open Settings
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
         <Card className="dark:bg-neutral-800 dark:border-neutral-700">
           <CardHeader>
             <CardTitle className="dark:text-neutral-100 flex flex-row gap-2 items-center text-xl">
-              <Settings size={22} />
-              Settings
+              <CircleUserRound size={22} />
+              Profile
             </CardTitle>
             <CardDescription className="dark:text-neutral-300">
-              Configure your preferences and settings
+              View and manage your account settings
             </CardDescription>
           </CardHeader>
           <CardContent>
