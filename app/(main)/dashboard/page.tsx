@@ -9,6 +9,7 @@ import {
   Settings,
   MessageCircle,
   User,
+  Image as ImageIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -68,6 +69,28 @@ export default function DashboardPage() {
               <Link href="/llm-chat">
                 <Button variant="action" className="w-full">
                   Open AI Chat
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </GradientBorder>
+
+        <GradientBorder width={1} roundedSize="xl">
+          <Card className="dark:bg-neutral-800 dark:border-neutral-700">
+            <CardHeader>
+              <CardTitle className="dark:text-neutral-100 flex flex-row gap-2 items-center text-xl">
+                <ImageIcon size={22} />
+                AI Image Generator
+              </CardTitle>
+              <CardDescription className="dark:text-neutral-300">
+                Create stunning images from text descriptions using advanced AI
+                technology
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link href="/image-generation">
+                <Button variant="action" className="w-full">
+                  Generate Images
                 </Button>
               </Link>
             </CardContent>

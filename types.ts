@@ -91,3 +91,12 @@ export interface ChatRoom {
     createdAt: Timestamp;
   };
 }
+
+// Types for image generation messages
+export interface ImageGenerationMessage {
+  id: string;
+  content: string;
+  imageUrl?: string;
+  timestamp: Date;
+  loading?: boolean;
+}
