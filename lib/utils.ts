@@ -238,6 +238,8 @@ export function getHeaderTitle(pathname: string) {
     return "Tic-Tac-Toe";
   } else if (pathname.startsWith("/games/memory")) {
     return "Memory Game";
+  } else if (pathname.startsWith("/games/puzzle")) {
+    return "Puzzle Challenges";
   } else if (pathname.startsWith("/games")) {
     return "Games";
   } else if (pathname.startsWith("/dashboard")) {
