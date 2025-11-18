@@ -225,7 +225,7 @@ export function getChatModeIcon(mode: ChatMode): string {
     viking: "🛡️",
     ghost: "👻",
     classBully: "👿",
-    bob: "👨",
+    bob: "🧒",
     boomer: "👨‍🦳",
     embarrassingParent: "🧔‍♂️",
     hacker: "🧑‍💻",
