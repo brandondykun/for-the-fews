@@ -127,4 +127,12 @@ export const DEFAULT_FIRST_MESSAGES: Record<ChatMode, Message[]> = {
       timestamp: new Date(),
     },
   ],
+  doctor: [
+    {
+      id: "1",
+      text: "Hello, I'm your AI doctor and I can help with anything from regular checkups, to surgeries! (Ok, not surgeries but you know what I mean)",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
 };

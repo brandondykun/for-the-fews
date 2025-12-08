@@ -98,6 +98,13 @@ export default function ChatModeButtons({
         text={getChatModeLabel("hacker")}
         icon={getChatModeIcon("hacker")}
       />
+      <ChatModeButton
+        chatMode={chatMode}
+        setChatMode={handleChatModeChange}
+        buttonMode="doctor"
+        text={getChatModeLabel("doctor")}
+        icon={getChatModeIcon("doctor")}
+      />
     </>
   );
 }

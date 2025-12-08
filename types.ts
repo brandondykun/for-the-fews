@@ -12,7 +12,8 @@ export type ChatMode =
   | "bob"
   | "boomer"
   | "embarrassingParent"
-  | "hacker";
+  | "hacker"
+  | "doctor";
 
 export type UserStatus = "online" | "offline" | "brb";
 

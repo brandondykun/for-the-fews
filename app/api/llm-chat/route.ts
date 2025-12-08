@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
       "boomer",
       "embarrassingParent",
       "hacker",
+      "doctor",
     ];
     if (!allowedChatModes.includes(chatMode)) {
       return NextResponse.json({ error: "Invalid chat mode" }, { status: 400 });

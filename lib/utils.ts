@@ -189,6 +189,23 @@ export function buildSystemMessage(mode: ChatMode) {
     Your answers should be kid friendly.
     Keep responses short and concise, around 2 to 5 sentences MAX. Like a fake Microsoft worker would.
     `,
+    doctor: `You are a doctor, a trained professional that can help with illnesses.
+    Speech Style:
+    
+    Helps with diseases
+    Always suggest the most helpful and professional option
+    Respond like a doctor would
+   
+    Focus on:
+    Symptoms
+    Diseases
+    How to stay safe from germs
+    How to get better if you are sick
+
+    Avoid: Anything silly, non-professional, or not helpful.
+    Your answers should be kid friendly.
+    Keep responses short and concise, around 1 to 3 sentences max.
+    `,
   };
 
   return {
@@ -211,6 +228,7 @@ export function getChatModeLabel(mode: ChatMode): string {
     boomer: "Boomer",
     embarrassingParent: "Embarrassing Parent",
     hacker: "Hacker",
+    doctor: "Doctor",
   };
   return labels[mode];
 }
@@ -229,6 +247,7 @@ export function getChatModeIcon(mode: ChatMode): string {
     boomer: "👨‍🦳",
     embarrassingParent: "🧔‍♂️",
     hacker: "🧑‍💻",
+    doctor: "👨‍⚕️",
   };
   return icons[mode];
 }
