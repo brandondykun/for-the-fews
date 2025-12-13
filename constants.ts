@@ -13,7 +13,7 @@ export const SPINNER_SIZES = {
 } as const;
 
 // Chat constants
-export const MAX_CONVERSATION_HISTORY = 4; // Number of previous messages to include for context
+export const MAX_CONVERSATION_HISTORY = 10; // Number of previous messages to include for context
 export const MAX_CONTENT_LENGTH = 1000; // Max length for sanitized message content
 export const DEFAULT_TEMPERATURE = 0.7;
 export const MAX_TOKENS = 1000;
@@ -131,6 +131,14 @@ export const DEFAULT_FIRST_MESSAGES: Record<ChatMode, Message[]> = {
     {
       id: "1",
       text: "Hello, I'm your AI doctor and I can help with anything from regular checkups, to surgeries! (Ok, not surgeries but you know what I mean)",
+      isUser: false,
+      timestamp: new Date(),
+    },
+  ],
+  daredevil: [
+    {
+      id: "1",
+      text: "Hey dude! I'm a daredevil and I'm up for any challenge you throw at me! What do you want me to do today, a sick back flip off of a moving train through a ring of fire? Or maybe jump out of a fighter jet into a pool of sharks?",
       isUser: false,
       timestamp: new Date(),
     },

@@ -13,7 +13,8 @@ export type ChatMode =
   | "boomer"
   | "embarrassingParent"
   | "hacker"
-  | "doctor";
+  | "doctor"
+  | "daredevil";
 
 export type UserStatus = "online" | "offline" | "brb";
 
