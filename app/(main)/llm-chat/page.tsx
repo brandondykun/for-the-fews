@@ -188,12 +188,20 @@ export default function ChatPage() {
       setFormName(chatbot.name);
       setFormEmoji(chatbot.emoji);
       setFormFirstMessageText(chatbot.firstMessageText);
+      setDescriptionText(chatbot.description || "");
+      setSpeechStyleText(chatbot.speechStyle || "");
+      setFocusText(chatbot.focus || "");
+      setAvoidText(chatbot.avoid || "");
     } else {
       // Add mode
       setEditingChatbot(null);
       setFormName("");
       setFormEmoji("");
       setFormFirstMessageText("");
+      setDescriptionText("");
+      setSpeechStyleText("");
+      setFocusText("");
+      setAvoidText("");
     }
     setChatbotDialogOpen(true);
   };
@@ -417,15 +425,16 @@ export default function ChatPage() {
                             checked={selectedChatbot?.id === chatbot.id}
                             className="mr-3 border-neutral-400"
                           />
-                          <span
-                            className={`text-sm font-semibold ${
+                          <div
+                            className={`text-sm font-semibold flex items-center gap-1 ${
                               selectedChatbot?.id === chatbot.id
                                 ? "text-neutral-900 dark:text-neutral-100"
                                 : "text-neutral-600 dark:text-neutral-400"
                             }`}
                           >
-                            {chatbot.emoji} {chatbot.name}
-                          </span>
+                            <div className="mt-0.5">{chatbot.emoji}</div>
+                            <div>{chatbot.name}</div>
+                          </div>
                         </div>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
