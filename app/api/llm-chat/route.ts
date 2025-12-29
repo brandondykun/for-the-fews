@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { messages, chatMode = "fart" } = await request.json();
+    const { messages, chatMode, customPrompt } = await request.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -64,7 +64,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate chatMode against allowed values
+    // Either chatMode or customPrompt must be provided
+    if (!chatMode && !customPrompt) {
+      return NextResponse.json(
+        { error: "Either chatMode or customPrompt is required" },
+        { status: 400 }
+      );
+    }
+
+    // If using a default chatMode, validate it
     const allowedChatModes = [
       "fart",
       "pirate",
@@ -81,7 +89,8 @@ export async function POST(request: NextRequest) {
       "doctor",
       "daredevil",
     ];
-    if (!allowedChatModes.includes(chatMode)) {
+
+    if (chatMode && !allowedChatModes.includes(chatMode)) {
       return NextResponse.json({ error: "Invalid chat mode" }, { status: 400 });
     }
 
@@ -91,9 +100,20 @@ export async function POST(request: NextRequest) {
       content: msg.content?.trim().slice(0, MAX_CONTENT_LENGTH), // Limit and trim content
     }));
 
-    devLog(`Processing ${messages.length} messages for chat mode: ${chatMode}`);
-
-    const systemMessage = buildSystemMessage(chatMode);
+    // Build system message - use customPrompt if provided, otherwise use chatMode
+    let systemMessage: { role: "system"; content: string };
+    if (customPrompt) {
+      devLog(`Processing ${messages.length} messages with custom prompt`);
+      systemMessage = {
+        role: "system",
+        content: customPrompt.trim().slice(0, MAX_CONTENT_LENGTH),
+      };
+    } else {
+      devLog(
+        `Processing ${messages.length} messages for chat mode: ${chatMode}`
+      );
+      systemMessage = buildSystemMessage(chatMode);
+    }
 
     // Create a streaming response
     const stream = await client.chat.completions.create({

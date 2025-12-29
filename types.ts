@@ -102,3 +102,17 @@ export interface ImageGenerationMessage {
   timestamp: Date;
   loading?: boolean;
 }
+
+// Custom chatbot types
+export interface Chatbot {
+  id: string;
+  userId: string;
+  name: string;
+  emoji: string;
+  firstMessageText: string;
+  createdAt: Date;
+  description: string;
+  speechStyle: string;
+  focus: string;
+  avoid: string;
+}

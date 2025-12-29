@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { User } from "firebase/auth";
 import { twMerge } from "tailwind-merge";
 
-import { ChatMode, UserDocument } from "@/types";
+import { Chatbot, ChatMode, UserDocument } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -358,4 +358,20 @@ export const formatTime = (seconds: number): string => {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
+
+// Build chatbot prompt for custom chatbots
+export const buildChatbotPrompt = (chatbot: Chatbot) => {
+  const prompt = `You are ${chatbot.name}. ${chatbot.description}
+
+Speech Style:
+${chatbot.speechStyle}
+
+Focus on:
+${chatbot.focus}
+
+Avoid:
+${chatbot.avoid}
+`;
+  return prompt;
 };

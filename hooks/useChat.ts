@@ -1,19 +1,38 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DEFAULT_FIRST_MESSAGES, MAX_CONVERSATION_HISTORY } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { useRateLimit } from "@/hooks/useRateLimit";
 import { devError, devWarn } from "@/lib/dev-utils";
-import { ChatMode, Message } from "@/types";
+import { buildChatbotPrompt } from "@/lib/utils";
+import { Chatbot, ChatMode, Message } from "@/types";
 
-export function useChat() {
+interface UseChatOptions {
+  chatbots?: Chatbot[];
+}
+
+export function useChat(options: UseChatOptions = {}) {
+  const { chatbots = [] } = options;
+
+  // Messages for default chat modes
   const [messagesByMode, setMessagesByMode] = useState<
     Record<ChatMode, Message[]>
   >(DEFAULT_FIRST_MESSAGES);
+
+  // Messages for custom chatbots (keyed by chatbot ID)
+  const [messagesByCustomChatbot, setMessagesByCustomChatbot] = useState<
+    Record<string, Message[]>
+  >({});
+
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
+
+  // Default chat mode selection
   const [chatMode, setChatMode] = useState<ChatMode>("fart");
+
+  // Custom chatbot selection (null means a default mode is selected)
+  const [selectedChatbot, setSelectedChatbot] = useState<Chatbot | null>(null);
 
   const { user } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -25,10 +44,33 @@ export function useChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Get current messages based on selection
+  const currentMessages = selectedChatbot
+    ? messagesByCustomChatbot[selectedChatbot.id] || []
+    : messagesByMode[chatMode];
+
+  // Initialize messages for a custom chatbot when selected
+  useEffect(() => {
+    if (selectedChatbot && !messagesByCustomChatbot[selectedChatbot.id]) {
+      const firstMessage: Message = {
+        id: "1",
+        text:
+          selectedChatbot.firstMessageText ||
+          `Hello! I'm ${selectedChatbot.name}. How can I help you?`,
+        isUser: false,
+        timestamp: new Date(),
+      };
+      setMessagesByCustomChatbot((prev) => ({
+        ...prev,
+        [selectedChatbot.id]: [firstMessage],
+      }));
+    }
+  }, [selectedChatbot, messagesByCustomChatbot]);
+
   // Auto-scroll when messages change
   useEffect(() => {
     scrollToBottom();
-  }, [messagesByMode, chatMode]);
+  }, [messagesByMode, messagesByCustomChatbot, chatMode, selectedChatbot]);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -50,7 +92,21 @@ export function useChat() {
     resetIfNeeded();
   }, [resetIfNeeded]);
 
-  const currentMessages = messagesByMode[chatMode];
+  // Select a default chat mode (clears custom chatbot selection)
+  const changeChatMode = (mode: ChatMode) => {
+    setChatMode(mode);
+    setSelectedChatbot(null); // Clear custom chatbot selection
+  };
+
+  // Select a custom chatbot (clears default mode selection visually)
+  const selectChatbot = (chatbot: Chatbot) => {
+    setSelectedChatbot(chatbot);
+  };
+
+  // Clear custom chatbot selection (goes back to default mode)
+  const clearChatbotSelection = () => {
+    setSelectedChatbot(null);
+  };
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -66,10 +122,21 @@ export function useChat() {
       timestamp: new Date(),
     };
 
-    setMessagesByMode((prev) => ({
-      ...prev,
-      [chatMode]: [...prev[chatMode], userMessage],
-    }));
+    // Add user message to appropriate message store
+    if (selectedChatbot) {
+      setMessagesByCustomChatbot((prev) => ({
+        ...prev,
+        [selectedChatbot.id]: [
+          ...(prev[selectedChatbot.id] || []),
+          userMessage,
+        ],
+      }));
+    } else {
+      setMessagesByMode((prev) => ({
+        ...prev,
+        [chatMode]: [...prev[chatMode], userMessage],
+      }));
+    }
 
     const currentInput = inputMessage;
     setInputMessage("");
@@ -85,10 +152,21 @@ export function useChat() {
       timestamp: new Date(),
     };
 
-    setMessagesByMode((prev) => ({
-      ...prev,
-      [chatMode]: [...prev[chatMode], placeholderAiMessage],
-    }));
+    // Add placeholder to appropriate message store
+    if (selectedChatbot) {
+      setMessagesByCustomChatbot((prev) => ({
+        ...prev,
+        [selectedChatbot.id]: [
+          ...(prev[selectedChatbot.id] || []),
+          placeholderAiMessage,
+        ],
+      }));
+    } else {
+      setMessagesByMode((prev) => ({
+        ...prev,
+        [chatMode]: [...prev[chatMode], placeholderAiMessage],
+      }));
+    }
 
     try {
       await processAIResponse(currentInput, aiMessageId);
@@ -118,16 +196,28 @@ export function useChat() {
       throw new Error("Unable to get authentication token");
     }
 
+    // Build request body - include custom prompt if using a custom chatbot
+    const requestBody: {
+      messages: typeof conversationMessages;
+      chatMode?: ChatMode;
+      customPrompt?: string;
+    } = {
+      messages: conversationMessages,
+    };
+
+    if (selectedChatbot) {
+      requestBody.customPrompt = buildChatbotPrompt(selectedChatbot);
+    } else {
+      requestBody.chatMode = chatMode;
+    }
+
     const response = await fetch("/api/llm-chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${idToken}`,
       },
-      body: JSON.stringify({
-        messages: conversationMessages,
-        chatMode: chatMode,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
@@ -172,12 +262,27 @@ export function useChat() {
             const data = JSON.parse(line);
             if (data.content) {
               accumulatedText += data.content;
-              setMessagesByMode((prev) => ({
-                ...prev,
-                [chatMode]: prev[chatMode].map((msg) =>
-                  msg.id === messageId ? { ...msg, text: accumulatedText } : msg
-                ),
-              }));
+
+              // Update the appropriate message store
+              if (selectedChatbot) {
+                setMessagesByCustomChatbot((prev) => ({
+                  ...prev,
+                  [selectedChatbot.id]: prev[selectedChatbot.id].map((msg) =>
+                    msg.id === messageId
+                      ? { ...msg, text: accumulatedText }
+                      : msg
+                  ),
+                }));
+              } else {
+                setMessagesByMode((prev) => ({
+                  ...prev,
+                  [chatMode]: prev[chatMode].map((msg) =>
+                    msg.id === messageId
+                      ? { ...msg, text: accumulatedText }
+                      : msg
+                  ),
+                }));
+              }
             } else if (data.done) {
               break;
             }
@@ -205,29 +310,37 @@ export function useChat() {
       }
     }
 
-    // Update the AI message with error
-    setMessagesByMode((prev) => ({
-      ...prev,
-      [chatMode]: prev[chatMode].map((msg) =>
-        msg.id === messageId ? { ...msg, text: errorMessage } : msg
-      ),
-    }));
-  };
-
-  const changeChatMode = (mode: ChatMode) => {
-    setChatMode(mode);
+    // Update the AI message with error in appropriate store
+    if (selectedChatbot) {
+      setMessagesByCustomChatbot((prev) => ({
+        ...prev,
+        [selectedChatbot.id]: prev[selectedChatbot.id].map((msg) =>
+          msg.id === messageId ? { ...msg, text: errorMessage } : msg
+        ),
+      }));
+    } else {
+      setMessagesByMode((prev) => ({
+        ...prev,
+        [chatMode]: prev[chatMode].map((msg) =>
+          msg.id === messageId ? { ...msg, text: errorMessage } : msg
+        ),
+      }));
+    }
   };
 
   return {
     // State
     messagesByMode,
+    messagesByCustomChatbot,
     inputMessage,
     loading,
     streaming,
     chatMode,
+    selectedChatbot,
     currentMessages,
     remaining,
     isLimitReached,
+    chatbots,
 
     // Refs
     messagesEndRef,
@@ -237,6 +350,8 @@ export function useChat() {
     setInputMessage,
     sendMessage,
     changeChatMode,
+    selectChatbot,
+    clearChatbotSelection,
 
     // Utilities
     scrollToBottom,

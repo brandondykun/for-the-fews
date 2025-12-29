@@ -4,7 +4,7 @@ import { ChatMode } from "@/types";
 import GradientBorder from "./gradientBorder";
 
 type Props = {
-  chatMode: ChatMode;
+  chatMode: ChatMode | null;
   setChatMode: (mode: ChatMode) => void;
   buttonMode: ChatMode;
   text: string;
